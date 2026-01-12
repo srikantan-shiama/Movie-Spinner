@@ -7,6 +7,9 @@ df = df[df["runtime"].notnull()]
 
 df = df[df["runtime"] > 0]
 
+# Filter for movies with rating above 6.5
+df = df[df["vote_average"] > 6.5]
+
 def parse_genres(genre_str):
     try:
         genres = ast.literal_eval(genre_str)
@@ -51,6 +54,10 @@ df["mood"] = df["genre_list"].apply(mood_bucket)
 print(df.head())
 
 import json
+import numpy as np
+
+# Replace NaN values with None (which becomes null in JSON)
+df = df.replace({np.nan: None})
 
 movies = df.to_dict(orient="records")
 with open("movies.json", "w") as f:
