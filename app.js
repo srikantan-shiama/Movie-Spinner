@@ -62,13 +62,23 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Load movies with timeout
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+  const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 second timeout for GitHub Pages
   
-  fetch("movies.json", { signal: controller.signal })
+  // Try to detect if we're on GitHub Pages (check for github.io in URL)
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  const jsonPath = isGitHubPages ? "./movies.json" : "movies.json";
+  
+  fetch(jsonPath, { signal: controller.signal })
     .then(res => {
       clearTimeout(timeoutId);
       console.log("Response status:", res.status, res.statusText);
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status} ${res.statusText}`);
+      console.log("Fetching from:", jsonPath);
+      if (!res.ok) {
+        if (res.status === 404) {
+          throw new Error(`File not found (404). Make sure movies.json is committed to your repository and pushed to GitHub.`);
+        }
+        throw new Error(`HTTP error! status: ${res.status} ${res.statusText}`);
+      }
       console.log("Starting to parse JSON (this may take a moment for large files)...");
       const result = document.getElementById("result");
       if (result) {
@@ -95,9 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = document.getElementById("result");
       if (result) {
         if (error.name === 'AbortError') {
-          result.innerHTML = "❌ Request timed out. The movies file is very large (7.4MB). Please wait and try refreshing the page.";
+          result.innerHTML = "❌ Request timed out. The movies file is large (2.8MB). GitHub Pages may be slow. Try refreshing the page.";
+        } else if (error.message.includes('404')) {
+          result.innerHTML = `❌ ${error.message}<br><br>To fix on GitHub Pages:<br>1. Make sure movies.json is in your repository<br>2. Commit and push: git add movies.json && git commit -m "Add movies.json" && git push<br>3. Wait a few minutes for GitHub Pages to update`;
         } else {
-          result.innerHTML = `❌ Error loading movies: ${error.message}. <br>Make sure you're accessing via http://localhost:8000 (not file://). <br>Check browser console (F12) for details.`;
+          result.innerHTML = `❌ Error loading movies: ${error.message}<br><br>Check browser console (F12) for details.<br>If on GitHub Pages, the file might be too large or not committed.`;
         }
       }
     });
