@@ -7,13 +7,11 @@ fetch("movies.json")
 function filterMovies() {
   const time = document.getElementById("time").value;
   const energy = document.getElementById("energy").value;
-  const comfort = document.getElementById("comfort").value;
   const mood = document.getElementById("mood").value;
 
   return movies.filter(m =>
     m.time_bucket === time &&
     m.energy === energy &&
-    m.comfort === comfort &&
     m.mood === mood
   );
 }
