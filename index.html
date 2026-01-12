@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What Should I Watch Tonight?</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>🎬 What Should I Watch Tonight?</h1>
+
+  <div class="controls">
+    <select id="time">
+      <option value="short">Under 90 min</option>
+      <option value="medium">90–120 min</option>
+      <option value="long">Over 2 hours</option>
+    </select>
+
+    <select id="energy">
+      <option value="low">Low energy</option>
+      <option value="medium">Medium energy</option>
+      <option value="high">High energy</option>
+    </select>
+
+    <select id="comfort">
+      <option value="comfort">Comfort</option>
+      <option value="neutral">Neutral</option>
+      <option value="challenge">Challenge</option>
+    </select>
+
+    <select id="mood">
+      <option value="light">Light</option>
+      <option value="reflective">Reflective</option>
+      <option value="intense">Intense</option>
+    </select>
+  </div>
+
+  <button id="spin">🎡 Spin the Wheel</button>
+
+  <div id="result"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
