@@ -18,10 +18,10 @@ df["genre_list"] = df["genres"].apply(parse_genres)
 
 def time_bucket(r):
     if r < 90:
-        return "<90"
+        return "short"
     if 90 <= r <= 120:
-        return "90-120"
-    return "120+"
+        return "medium"
+    return "long"
 
 df["time_bucket"] = df["runtime"].apply(time_bucket)
 
